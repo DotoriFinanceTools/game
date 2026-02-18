@@ -12,121 +12,80 @@
             --grid-bg: rgba(255, 255, 255, 0.5);
             --gap: 5px;
             --jelly-size: 46px;
-            --col-cat: #2a2a2a;
-            --col-frog: #88d498;
-            --col-fox: #ffaa5e;
-            --col-sheep: #ffeebb;
-            --col-dog: #ffffff;
-            --col-cow: #c4a6f5;
+            --col-cat: #2a2a2a;    --col-frog: #88d498; 
+            --col-fox: #ffaa5e;    --col-sheep: #ffeebb;
+            --col-dog: #ffffff;    --col-cow: #c4a6f5;
             --col-bunny: #ffb7b2;
         }
 
-        * {
-            box-sizing: border-box;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         body {
-            margin: 0; padding: 0;
-            background: var(--bg-gradient);
-            color: #554433;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            height: 100vh; overflow: hidden;
+            margin: 0; padding: 0; background: var(--bg-gradient); color: #554433;
+            font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; height: 100vh; overflow: hidden;
         }
 
+        /* --- UI 디자인 --- */
         .game-header {
-            width: 90%; max-width: 420px;
-            display: flex; justify-content: space-between;
-            padding: 10px 25px; background: white;
-            border-radius: 30px; margin-bottom: 10px;
-            border: 3px solid #f0f0f0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            width: 90%; max-width: 420px; display: flex; justify-content: space-between;
+            padding: 10px 25px; background: white; border-radius: 30px; margin-bottom: 10px;
+            border: 3px solid #f0f0f0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); z-index: 10;
         }
-
         .stat-box { text-align: center; }
         .stat-label { font-size: 0.8rem; color: #999; font-weight: bold; }
         .stat-value { font-size: 1.5rem; font-weight: 900; }
 
         .fever-container {
-            width: 90%; max-width: 420px; height: 12px;
-            background: white; border-radius: 20px;
-            margin-bottom: 20px; border: 2px solid #eee;
-            overflow: hidden; position: relative;
+            width: 90%; max-width: 420px; height: 12px; background: white; border-radius: 20px;
+            margin-bottom: 20px; border: 2px solid #eee; overflow: hidden; position: relative; z-index: 10;
         }
-
-        .fever-fill {
-            height: 100%; width: 0%;
-            background: repeating-linear-gradient(45deg, #ff9a9e, #ff9a9e 10px, #fecfef 10px, #fecfef 20px);
-            transition: width 0.3s ease-out;
-        }
+        .fever-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff9a9e, #fecfef); transition: width 0.3s; }
 
         .grid-container {
-            position: relative; background: rgba(255,255,255,0.7);
-            border-radius: 20px; padding: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid #fff;
+            position: relative; background: rgba(255,255,255,0.7); border-radius: 20px;
+            padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid #fff;
+        }
+        .grid { display: grid; grid-template-columns: repeat(7, var(--jelly-size)); grid-template-rows: repeat(7, var(--jelly-size)); gap: var(--gap); }
+
+        /* --- 동물 캐릭터 CSS Art --- */
+        .cell { width: var(--jelly-size); height: var(--jelly-size); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+        .animal { width: 90%; height: 85%; position: relative; border-radius: 40% 40% 45% 45%; box-shadow: inset 2px 2px 5px rgba(255,255,255,0.7), 0 3px 5px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .animal::after { /* 눈 */
+            content: ''; position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); width: 60%; height: 30%;
+            background-image: radial-gradient(circle at 30% 50%, #000 15%, transparent 16%), radial-gradient(circle at 70% 50%, #000 15%, transparent 16%),
+                              radial-gradient(circle at 30% 50%, #fff 55%, transparent 56%), radial-gradient(circle at 70% 50%, #fff 55%, transparent 56%);
+            background-size: 100% 100%; background-repeat: no-repeat;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(7, var(--jelly-size));
-            grid-template-rows: repeat(7, var(--jelly-size));
-            gap: var(--gap);
-        }
+        .animal-0 { background-color: var(--col-cat); } /* 고양이 */
+        .animal-0::before { content: ''; position: absolute; top: -15%; left: 5%; width: 90%; height: 50%; background: inherit; clip-path: polygon(0% 100%, 20% 0%, 40% 100%, 60% 100%, 80% 0%, 100% 100%); }
+        .animal-1 { background-color: var(--col-fox); } /* 여우 */
+        .animal-1::before { content: ''; position: absolute; top: -20%; left: 0%; width: 100%; height: 60%; background: inherit; clip-path: polygon(0% 100%, 15% 0%, 45% 100%, 55% 100%, 85% 0%, 100% 100%); }
+        .animal-2 { background-color: var(--col-sheep); border-radius: 50%; } /* 양 */
+        .animal-3 { background-color: var(--col-frog); } /* 개구리 */
+        .animal-4 { background-color: var(--col-dog); } /* 강아지 */
+        .animal-5 { background-color: var(--col-cow); } /* 소 */
+        .animal-6 { background-color: var(--col-bunny); } /* 토끼 */
+        .animal-6::before { content: ''; position: absolute; top: -40%; left: 0; width: 100%; height: 50%; background: radial-gradient(ellipse at 15% 50%, var(--col-bunny) 60%, transparent 62%), radial-gradient(ellipse at 85% 50%, var(--col-bunny) 60%, transparent 62%); background-size: 100% 100%; }
 
-        .cell {
-            width: var(--jelly-size); height: var(--jelly-size);
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; position: relative;
-        }
+        .cell.selected .animal { transform: scale(1.2); z-index: 100; filter: brightness(1.1); }
 
-        .animal {
-            width: 90%; height: 85%; border-radius: 40%;
-            box-shadow: inset 2px 2px 5px rgba(255,255,255,0.7), inset -2px -5px 5px rgba(0,0,0,0.1);
-        }
-
-        .animal-0 { background-color: var(--col-cat); }
-        .animal-1 { background-color: var(--col-fox); }
-        .animal-2 { background-color: var(--col-sheep); }
-        .animal-3 { background-color: var(--col-frog); }
-        .animal-4 { background-color: var(--col-dog); }
-        .animal-5 { background-color: var(--col-cow); }
-        .animal-6 { background-color: var(--col-bunny); }
-
-        .modal {
-            display: none; position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);
-            justify-content: center; align-items: center; z-index: 2000;
-        }
-
-        .modal-content {
-            background: white; padding: 40px; border-radius: 40px;
-            text-align: center; border: 5px solid #ff9a9e;
-        }
-
-        .btn {
-            background: #ff9a9e; border: none; padding: 15px 40px;
-            color: white; border-radius: 30px; font-weight: bold;
-            cursor: pointer; margin-top: 20px;
-        }
+        /* --- 결과 모달 --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 40px; border-radius: 40px; text-align: center; border: 5px solid #ff9a9e; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .btn { background: #ff9a9e; border: none; padding: 15px 40px; color: white; font-size: 1.2rem; border-radius: 30px; cursor: pointer; font-weight: bold; margin-top: 20px; }
 
         @media (max-width: 400px) { :root { --jelly-size: 12.5vw; } }
     </style>
 </head>
 <body>
 
-    <div id="fever-text" style="position:absolute; top:50%; opacity:0; font-size:3rem; color:red; z-index:1000; pointer-events:none;">FEVER!</div>
-
     <div class="game-header">
         <div class="stat-box"><div class="stat-label">TIME</div><div class="stat-value" id="time">60</div></div>
         <div class="stat-box"><div class="stat-label">SCORE</div><div class="stat-value" id="score">0</div></div>
     </div>
-
     <div class="fever-container"><div class="fever-fill" id="fever-fill"></div></div>
-
     <div class="grid-container"><div class="grid" id="grid"></div></div>
 
     <div class="modal" id="game-over-modal">
@@ -141,19 +100,19 @@
     <script>
         const CONFIG = {
             rows: 7, cols: 7,
-            colors: ['#2a2a2a', '#ffaa5e', '#ffeebb', '#88d498', '#ffffff', '#c4a6f5', '#ffb7b2'],
-            timeLimit: 60, feverThreshold: 5
+            colors: [0, 1, 2, 3, 4, 5, 6], // 동물 타입 ID
+            timeLimit: 60
         };
 
         let grid = [];
         let score = 0;
         let timer = 0;
         let timerInterval = null;
+        let selectedCell = null;
         let isProcessing = false;
-        let comboCount = 0;
 
         function startGame() {
-            score = 0; timer = CONFIG.timeLimit; comboCount = 0;
+            score = 0; timer = CONFIG.timeLimit;
             document.getElementById('score').innerText = '0';
             document.getElementById('time').innerText = timer;
             document.getElementById('game-over-modal').style.display = 'none';
@@ -173,26 +132,62 @@
             for (let r = 0; r < CONFIG.rows; r++) {
                 let row = [];
                 for (let c = 0; c < CONFIG.cols; c++) {
-                    const type = Math.floor(Math.random() * CONFIG.colors.length);
-                    const cellEl = document.createElement('div');
-                    cellEl.className = 'cell';
-                    const animal = document.createElement('div');
-                    animal.className = `animal animal-${type}`;
-                    cellEl.appendChild(animal);
-                    cellEl.onclick = () => handleInteraction(r, c);
-                    gridEl.appendChild(cellEl);
-                    row.push({ type, el: cellEl });
+                    const type = Math.floor(Math.random() * 7);
+                    row.push({ r, c, type });
                 }
                 grid.push(row);
             }
+            renderGrid();
         }
 
-        function handleInteraction(r, c) {
-            // 간단한 클릭 피드백 (확장 가능)
-            grid[r][c].el.style.transform = 'scale(0.9)';
-            setTimeout(() => grid[r][c].el.style.transform = 'scale(1)', 100);
-            score += 10;
-            document.getElementById('score').innerText = score;
+        function renderGrid() {
+            const gridEl = document.getElementById('grid');
+            gridEl.innerHTML = '';
+            for (let r = 0; r < CONFIG.rows; r++) {
+                for (let c = 0; c < CONFIG.cols; c++) {
+                    const data = grid[r][c];
+                    const cellEl = document.createElement('div');
+                    cellEl.className = 'cell';
+                    if (selectedCell && selectedCell.r === r && selectedCell.c === c) cellEl.classList.add('selected');
+
+                    const animal = document.createElement('div');
+                    animal.className = `animal animal-${data.type}`;
+                    cellEl.appendChild(animal);
+                    cellEl.onclick = () => handleInteraction(r, c);
+                    gridEl.appendChild(cellEl);
+                }
+            }
+        }
+
+        async function handleInteraction(r, c) {
+            if (isProcessing || timer <= 0) return;
+
+            if (!selectedCell) {
+                selectedCell = { r, c };
+                renderGrid();
+            } else {
+                const dr = Math.abs(selectedCell.r - r);
+                const dc = Math.abs(selectedCell.c - c);
+
+                if (dr + dc === 1) {
+                    isProcessing = true;
+                    // 위치 교체 로직
+                    const temp = grid[r][c].type;
+                    grid[r][c].type = grid[selectedCell.r][selectedCell.c].type;
+                    grid[selectedCell.r][selectedCell.c].type = temp;
+                    
+                    selectedCell = null;
+                    renderGrid();
+                    
+                    // 매칭 체크 및 점수 계산 (간략화)
+                    score += 100;
+                    document.getElementById('score').innerText = score;
+                    isProcessing = false;
+                } else {
+                    selectedCell = { r, c };
+                    renderGrid();
+                }
+            }
         }
 
         function endGame() {
