@@ -8,15 +8,16 @@
         :root {
             --bg-gradient: linear-gradient(180deg, #fff9f0 0%, #ffeaf0 100%);
             --max-width: 420px;
-            --gap: 6px;
-            /* 동물 색상 */
-            --c0: #333333; /* 0: 검은 고양이 */
-            --c1: #ffaa5e; /* 1: 주황 여우 */
-            --c2: #fff5d0; /* 2: 크림 양 */
-            --c3: #88d498; /* 3: 초록 개구리 */
-            --c4: #ffffff; /* 4: 흰색 강아지 */
-            --c5: #c4a6f5; /* 5: 보라 소 */
-            --c6: #ffb7b2; /* 6: 핑크 토끼 */
+            --gap: 8px; /* 간격 약간 넓힘 */
+            
+            /* 파스텔톤 동물 색상 (스크린샷 매칭) */
+            --c0: #333333; /* 고양이 (검정) */
+            --c1: #ffaa5e; /* 여우 (주황) */
+            --c2: #fdf5d0; /* 양 (크림) */
+            --c3: #88d498; /* 개구리 (연두) */
+            --c4: #ffffff; /* 강아지 (흰색) */
+            --c5: #bfa6f5; /* 소 (연보라) */
+            --c6: #ffb7b2; /* 토끼 (핑크) */
         }
 
         * { box-sizing: border-box; touch-action: manipulation; user-select: none; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -28,23 +29,23 @@
             font-family: "Segoe UI", sans-serif; 
         }
 
-        /* --- 레이아웃: 모든 박스의 너비를 92%로 통일 --- */
+        /* 레이아웃 컨테이너 */
         .layout-wrapper {
-            width: 92%; 
-            max-width: var(--max-width);
+            width: 90%; 
+            max-width: var(--max-width); 
             margin: 0 auto;
         }
 
-        /* 점수판 */
+        /* 상단 헤더 */
         .game-header { 
             display: flex; justify-content: space-between; padding: 15px 25px; 
-            background: white; border-radius: 25px; 
-            border: 3px solid #f0f0f0; box-shadow: 0 8px 20px rgba(0,0,0,0.05); 
-            margin-bottom: 15px; 
+            background: white; border-radius: 30px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
         }
         .stat-box { text-align: center; }
-        .stat-label { font-size: 0.75rem; color: #aaa; font-weight: 800; letter-spacing: 1px; }
-        .stat-value { font-size: 1.5rem; font-weight: 900; color: #554433; }
+        .stat-label { font-size: 0.75rem; color: #bbb; font-weight: 800; letter-spacing: 1px; margin-bottom: 3px; }
+        .stat-value { font-size: 1.6rem; font-weight: 900; color: #554433; }
 
         /* 피버 게이지 */
         .fever-container { 
@@ -53,82 +54,85 @@
         }
         .fever-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff9a9e, #ffdde1); transition: width 0.3s; }
 
-        /* 게임판 */
+        /* 게임판 그리드 */
         .grid-container { 
-            background: rgba(255,255,255,0.65); 
-            border-radius: 25px; padding: 10px; 
-            border: 4px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            background: rgba(255,255,255,0.5); 
+            border-radius: 30px; padding: 15px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05); 
         }
         .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--gap); }
 
-        /* --- 아이콘 디자인 (오류 없는 HTML 방식) --- */
+        /* --- [아이콘 디자인] 초기 버전 스타일 복원 --- */
         .cell { aspect-ratio: 1/1; position: relative; cursor: pointer; z-index: 1; }
         
-        /* 얼굴 본체 */
+        /* 1. 몸통 (동글동글한 사각형) */
         .animal { 
             width: 100%; height: 100%; 
-            border-radius: 38%; 
-            position: relative; z-index: 5; 
+            border-radius: 40%; 
+            position: relative; z-index: 10; 
             transition: transform 0.15s; 
-            box-shadow: inset 3px 3px 6px rgba(255,255,255,0.7), inset -2px -2px 5px rgba(0,0,0,0.05), 0 4px 8px rgba(0,0,0,0.1); 
+            /* 매트한 질감 + 하단 그림자 (스크린샷 스타일) */
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1), inset 0 2px 5px rgba(255,255,255,0.4);
         }
 
-        /* 눈 (공통) */
-        .eye-container {
-            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
-            width: 60%; height: 25%; z-index: 6;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .eye {
-            width: 38%; height: 100%; background: white; border-radius: 50%; position: relative;
-        }
-        .pupil {
-            width: 55%; height: 55%; background: #222; border-radius: 50%; 
+        /* 2. 눈 (흰색 바 형태) */
+        .face {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60%; height: 28%;
+            background: white;
+            border-radius: 10px; /* 둥근 네모 */
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 20;
+            padding: 0 4px;
+        }
+        /* 눈알 (작은 점) */
+        .eye-dot {
+            width: 5px; height: 5px; background: #222; border-radius: 50%;
         }
 
-        /* 귀/뿔 디자인 (얼굴 뒤로 배치) */
-        .ear { position: absolute; z-index: 1; background-color: inherit; }
+        /* 3. 귀/뿔 (몸통 뒤로) */
+        .ear { position: absolute; z-index: -1; background-color: inherit; }
 
-        /* 0: 고양이 (뾰족) */
+        /* --- 동물별 귀 디자인 (HTML 구조 기반) --- */
+        
+        /* 0: 고양이 (검정) - 뾰족 귀 */
         .animal-0 { background-color: var(--c0); }
-        .animal-0 .ear.left { top: -15%; left: 0; width: 40%; height: 50%; border-radius: 5px 20px 0 0; transform: skewY(10deg); }
-        .animal-0 .ear.right { top: -15%; right: 0; width: 40%; height: 50%; border-radius: 20px 5px 0 0; transform: skewY(-10deg); }
+        .animal-0 .ear.L { top: -15%; left: 0; width: 40%; height: 50%; border-radius: 4px 20px 0 0; transform: skewY(15deg); }
+        .animal-0 .ear.R { top: -15%; right: 0; width: 40%; height: 50%; border-radius: 20px 4px 0 0; transform: skewY(-15deg); }
 
-        /* 1: 여우 (큰 귀) */
+        /* 1: 여우 (주황) - 큰 귀 */
         .animal-1 { background-color: var(--c1); }
-        .animal-1 .ear.left { top: -20%; left: -5%; width: 50%; height: 60%; border-radius: 10px 30px 0 0; transform: rotate(-15deg); }
-        .animal-1 .ear.right { top: -20%; right: -5%; width: 50%; height: 60%; border-radius: 30px 10px 0 0; transform: rotate(15deg); }
+        .animal-1 .ear.L { top: -20%; left: -5%; width: 50%; height: 60%; border-radius: 10px 30px 0 0; transform: rotate(-10deg); }
+        .animal-1 .ear.R { top: -20%; right: -5%; width: 50%; height: 60%; border-radius: 30px 10px 0 0; transform: rotate(10deg); }
 
-        /* 2: 양 (몽실) */
-        .animal-2 { background-color: var(--c2); border-radius: 50%; border: 2px dashed #eecfa1; }
-        .animal-2 .ear.left { top: 20%; left: -15%; width: 30%; height: 30%; border-radius: 50%; background: var(--c2); }
-        .animal-2 .ear.right { top: 20%; right: -15%; width: 30%; height: 30%; border-radius: 50%; background: var(--c2); }
+        /* 2: 양 (크림) - 스티치 테두리 */
+        .animal-2 { background-color: var(--c2); border-radius: 50%; border: 2px dashed #dacba9; box-shadow: none; }
+        /* 양은 귀 대신 몸통 스타일이 중요함 */
 
-        /* 3: 개구리 (둥근 눈) */
+        /* 3: 개구리 (연두) - 둥근 귀(눈) */
         .animal-3 { background-color: var(--c3); border-radius: 45% 45% 40% 40%; }
-        .animal-3 .ear.left { top: -15%; left: 5%; width: 35%; height: 35%; border-radius: 50%; background: var(--c3); }
-        .animal-3 .ear.right { top: -15%; right: 5%; width: 35%; height: 35%; border-radius: 50%; background: var(--c3); }
+        .animal-3 .ear.L { top: -15%; left: 5%; width: 35%; height: 35%; border-radius: 50%; }
+        .animal-3 .ear.R { top: -15%; right: 5%; width: 35%; height: 35%; border-radius: 50%; }
 
-        /* 4: 강아지 (처진 귀) */
+        /* 4: 강아지 (흰색) - 처진 귀 */
         .animal-4 { background-color: var(--c4); border: 1px solid #eee; }
-        .animal-4 .ear.left { top: 10%; left: -15%; width: 35%; height: 50%; background: #e0e0e0; border-radius: 20px; transform: rotate(20deg); }
-        .animal-4 .ear.right { top: 10%; right: -15%; width: 35%; height: 50%; background: #e0e0e0; border-radius: 20px; transform: rotate(-20deg); }
+        .animal-4 .ear.L { top: 15%; left: -12%; width: 30%; height: 50%; background: #e8e8e8; border-radius: 20px; transform: rotate(15deg); }
+        .animal-4 .ear.R { top: 15%; right: -12%; width: 30%; height: 50%; background: #e8e8e8; border-radius: 20px; transform: rotate(-15deg); }
 
-        /* 5: 소 (뿔) */
+        /* 5: 소 (보라) - 작은 뿔 */
         .animal-5 { background-color: var(--c5); }
-        .animal-5 .ear.left { top: -15%; left: 10%; width: 25%; height: 40%; background: #a58bc2; border-radius: 5px 20px 0 0; transform: rotate(-20deg); }
-        .animal-5 .ear.right { top: -15%; right: 10%; width: 25%; height: 40%; background: #a58bc2; border-radius: 20px 5px 0 0; transform: rotate(20deg); }
+        .animal-5 .ear.L { top: -10%; left: 15%; width: 20%; height: 30%; background: #a088d0; border-radius: 50px 50px 0 0; transform: rotate(-20deg); }
+        .animal-5 .ear.R { top: -10%; right: 15%; width: 20%; height: 30%; background: #a088d0; border-radius: 50px 50px 0 0; transform: rotate(20deg); }
 
-        /* 6: 토끼 (길고 둥근 귀 - 오류 수정됨) */
+        /* 6: 토끼 (핑크) - 긴 귀 (오류 수정됨) */
         .animal-6 { background-color: var(--c6); }
-        .animal-6 .ear.left { top: -35%; left: 15%; width: 25%; height: 60%; background: var(--c6); border-radius: 20px 20px 0 0; }
-        .animal-6 .ear.right { top: -35%; right: 15%; width: 25%; height: 60%; background: var(--c6); border-radius: 20px 20px 0 0; }
+        .animal-6 .ear.L { top: -35%; left: 15%; width: 25%; height: 60%; border-radius: 20px 20px 0 0; }
+        .animal-6 .ear.R { top: -35%; right: 15%; width: 25%; height: 60%; border-radius: 20px 20px 0 0; }
 
-        .selected .animal { transform: scale(1.15); filter: brightness(1.1); z-index: 10; box-shadow: 0 0 15px #ff9a9e; }
+        .selected .animal { transform: scale(1.15); filter: brightness(1.05); z-index: 20; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
 
         /* --- 파티클 이펙트 --- */
-        .particle { position: absolute; width: 10px; height: 10px; border-radius: 50%; pointer-events: none; z-index: 999; animation: burst 0.6s ease-out forwards; }
+        .particle { position: absolute; width: 10px; height: 10px; border-radius: 50%; pointer-events: none; z-index: 100; animation: burst 0.6s ease-out forwards; }
         @keyframes burst { 
             0% { opacity: 1; transform: translate(0,0) scale(1); } 
             100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.5); } 
@@ -136,8 +140,8 @@
 
         /* 모달 */
         .modal { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: white; padding: 40px; border-radius: 40px; text-align: center; border: 5px solid #ff9a9e; }
-        .btn { background: #ff9a9e; border: none; padding: 15px 40px; color: white; border-radius: 30px; font-weight: bold; font-size: 1.2rem; cursor: pointer; margin-top: 20px; box-shadow: 0 5px 0 #e08085; }
+        .modal-content { background: white; padding: 40px; border-radius: 40px; text-align: center; border: 5px solid #ff9a9e; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+        .btn { background: #ff9a9e; border: none; padding: 15px 40px; color: white; border-radius: 30px; font-weight: bold; font-size: 1.2rem; cursor: pointer; margin-top: 20px; box-shadow: 0 5px 0 #e08085; transition: transform 0.1s; }
         .btn:active { transform: translateY(5px); box-shadow: none; }
     </style>
 </head>
@@ -155,24 +159,19 @@
 
     <div class="modal" id="modal">
         <div class="modal-content">
-            <h1 style="color:#554433;">Game Over</h1>
-            <h2 id="final-score" style="font-size:3.5rem; color:#ff9a9e;">0</h2>
+            <h1 style="color:#554433; margin-bottom:10px;">Game Over</h1>
+            <h2 id="final-score" style="font-size:3.5rem; color:#ff9a9e; margin:0;">0</h2>
             <button class="btn" onclick="startGame()">RESTART</button>
         </div>
     </div>
 
 <script>
     const ROWS = 7, COLS = 7;
-    // 동물 색상 (파티클용)
-    const COLORS = ['#333333', '#ffaa5e', '#fff5d0', '#88d498', '#ffffff', '#c4a6f5', '#ffb7b2'];
+    // 파티클용 색상 코드 (CSS 변수와 일치시킴)
+    const COLORS = ['#333333', '#ffaa5e', '#fdf5d0', '#88d498', '#ffffff', '#bfa6f5', '#ffb7b2'];
     
     let grid = [], score = 0, timer = 60, selected = null, isBusy = false, combo = 0;
     const gridEl = document.getElementById('grid');
-
-    // 에러 발생 시 알림 (디버깅용)
-    window.onerror = function(msg, url, line) {
-        alert("오류 발생: " + msg);
-    };
 
     function startGame() {
         score = 0; timer = 60; selected = null; isBusy = false; combo = 0;
@@ -197,15 +196,17 @@
                 // 동물 본체
                 const ani = document.createElement('div'); ani.className = `animal animal-${type}`;
                 
-                // 귀/뿔 추가
-                const earL = document.createElement('div'); earL.className = 'ear left';
-                const earR = document.createElement('div'); earR.className = 'ear right';
-                ani.appendChild(earL); ani.appendChild(earR);
+                // 귀/뿔 (HTML로 추가)
+                if (type !== 2) { // 양(2)은 귀 없음
+                    const earL = document.createElement('div'); earL.className = 'ear L';
+                    const earR = document.createElement('div'); earR.className = 'ear R';
+                    ani.appendChild(earL); ani.appendChild(earR);
+                }
 
-                // 눈 추가 (공통)
-                const eyes = document.createElement('div'); eyes.className = 'eye-container';
-                eyes.innerHTML = '<div class="eye"><div class="pupil"></div></div><div class="eye"><div class="pupil"></div></div>';
-                ani.appendChild(eyes);
+                // 눈 (흰색 바 형태)
+                const face = document.createElement('div'); face.className = 'face';
+                face.innerHTML = '<div class="eye-dot"></div><div class="eye-dot"></div>';
+                ani.appendChild(face);
 
                 if (selected && selected.r === r && selected.c === c) cell.classList.add('selected');
                 cell.onclick = () => handleClick(r, c);
@@ -242,10 +243,9 @@
         let matches = findMatches();
         while (matches.length > 0) {
             combo++; score += matches.length * 10 * combo;
-            // 파티클 생성
             matches.forEach(([r, c]) => {
                 if(grid[r][c] !== -1) {
-                    createExplosion(r, c, COLORS[grid[r][c]]);
+                    createExplosion(r, c, COLORS[grid[r][c]]); // 색상 파티클
                     grid[r][c] = -1;
                 }
             });
@@ -258,8 +258,7 @@
     }
 
     function createExplosion(r, c, color) {
-        const cellIndex = r * COLS + c;
-        if (cellIndex >= gridEl.children.length) return;
+        const cellIndex = r * COLS + c; if (cellIndex >= gridEl.children.length) return;
         const cell = gridEl.children[cellIndex];
         const rect = cell.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2; const centerY = rect.top + rect.height / 2;
@@ -268,7 +267,7 @@
             const p = document.createElement('div'); p.className = 'particle';
             p.style.backgroundColor = color;
             p.style.left = centerX + 'px'; p.style.top = centerY + 'px';
-            const angle = Math.random() * Math.PI * 2; const dist = 30 + Math.random() * 40;
+            const angle = Math.random() * Math.PI * 2; const dist = 20 + Math.random() * 40;
             p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
             p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
             document.body.appendChild(p); setTimeout(() => p.remove(), 600);
