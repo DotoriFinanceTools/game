@@ -1,0 +1,830 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2487.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="ko"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- 모바일 대응: 화면 확대 방지 및 앱 스타일 설정 --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="apple-mobile-web-app-capable" content="yes"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Jelly Friends Pop&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 배경: 부드러운 파스텔톤 그라데이션 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--bg-gradient: linear-gradient(180deg, #fff9f0 0%, #ffeaf0 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--grid-bg: rgba(255, 255, 255, 0.5);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--gap: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--jelly-size: 46px; /* 기본 블록 크기 */</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 동물 색상 팔레트 (가시성 개선됨) */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--col-cat: #2a2a2a;<span class="Apple-converted-space">    </span>/* 검은 고양이 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--col-frog: #88d498; <span class="Apple-converted-space">  </span>/* 초록 개구리 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--col-fox: #ffaa5e;<span class="Apple-converted-space">    </span>/* 주황 여우 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--col-sheep: #ffeebb;<span class="Apple-converted-space">  </span>/* 노란 양 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--col-dog: #ffffff;<span class="Apple-converted-space">    </span>/* 흰 강아지 (더 밝은 흰색) */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--col-cow: #c4a6f5;<span class="Apple-converted-space">    </span>/* 보라색 소 (포도맛 젤리 느낌) */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--col-bunny: #ffb7b2;<span class="Apple-converted-space">  </span>/* 분홍 토끼 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>* {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>touch-action: manipulation; /* 더블 탭 확대 방지 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>user-select: none; /* 텍스트 선택 방지 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>-webkit-tap-highlight-color: transparent; /* 모바일 터치 하이라이트 제거 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: var(--bg-gradient);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #554433;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Gaegu', 'Segoe UI', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 가로 모드 및 PC 화면 중앙 정렬 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden; /* 스크롤 방지 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 배경 패턴 (낙서 느낌) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body::before {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%; height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-image:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(#ddd 10%, transparent 10%),</p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(#eee 10%, transparent 10%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-size: 20px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-position: 0 0, 10px 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0.5;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: -2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- 상단 UI (점수, 시간) --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.game-header {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 90%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-width: 420px; /* 모바일 최적 너비 제한 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 25px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 3px solid #f0f0f0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 15px rgba(0,0,0,0.05);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 10;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stat-box { text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stat-label {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.8rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #999;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: 1px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stat-value {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 900;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #554433;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 피버 게이지 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.fever-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 90%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-width: 420px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #eee;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 10;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.fever-fill {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 0%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: repeating-linear-gradient(</p>
+<p class="p1"><span class="Apple-converted-space">                </span>45deg,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>#ff9a9e,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>#ff9a9e 10px,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>#fecfef 10px,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>#fecfef 20px</p>
+<p class="p1"><span class="Apple-converted-space">            </span>);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: width 0.3s ease-out;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 피버 텍스트 애니메이션 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.fever-text {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 50%; left: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translate(-50%, -50%) scale(0);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 3rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 900;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #ff5555;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-shadow: 2px 2px 0px white, 4px 4px 0px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>pointer-events: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1000;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>white-space: nowrap;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.fever-active .fever-text {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translate(-50%, -50%) scale(1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: bounceText 0.6s infinite alternate;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- 게임 그리드 --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.grid-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255,255,255,0.7);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 30px rgba(0,0,0,0.05);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 4px solid #fff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 5;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.grid {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(7, var(--jelly-size));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid-template-rows: repeat(7, var(--jelly-size));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: var(--gap);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.cell {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: var(--jelly-size);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: var(--jelly-size);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- 젤리 동물 디자인 (CSS Art) --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 90%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 85%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 40% 40% 45% 45%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 젤리 질감: 내부 그림자와 광택 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>inset 2px 2px 5px rgba(255,255,255,0.7),<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>inset -2px -5px 5px rgba(0,0,0,0.1),</p>
+<p class="p1"><span class="Apple-converted-space">                </span>0 3px 5px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 공통: 눈 (왕눈이 스타일) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal::after {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 35%; left: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translate(-50%, -50%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 60%; height: 30%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-image:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 30% 50%, #000 15%, transparent 16%), /* 왼쪽 눈동자 */</p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 70% 50%, #000 15%, transparent 16%), /* 오른쪽 눈동자 */</p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 30% 50%, #fff 55%, transparent 56%), /* 왼쪽 흰자 */</p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 70% 50%, #fff 55%, transparent 56%); /* 오른쪽 흰자 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-size: 100% 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-repeat: no-repeat;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 개별 동물 스타일링 */</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 0: 검은 고양이 (뾰족 귀 2개) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-0 { background-color: var(--col-cat); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-0::before {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: ''; position: absolute; top: -15%; left: 5%; width: 90%; height: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: inherit;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 삼각형 귀 2개를 clip-path로 그림 (머리 묶은 느낌 X) */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clip-path: polygon(0% 100%, 20% 0%, 40% 100%, 60% 100%, 80% 0%, 100% 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 2px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 1: 주황 여우 (넓고 큰 귀) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-1 { background-color: var(--col-fox); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-1::before {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: ''; position: absolute; top: -20%; left: 0%; width: 100%; height: 60%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: inherit;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clip-path: polygon(0% 100%, 15% 0%, 45% 100%, 55% 100%, 85% 0%, 100% 100%);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 2: 노란 양 (몽실몽실) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-2 {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--col-sheep);<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px dashed #eecfa1; /* 털 질감 표현 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-2::before {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: ''; position: absolute; top: 10%; left: -10%; width: 120%; height: 30%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(to right, #eecfa1 20%, transparent 20%, transparent 80%, #eecfa1 80%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 3: 초록 개구리 (입 강조) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-3 { background-color: var(--col-frog); border-radius: 45% 45% 40% 40%; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-3::before {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 스마일 입 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: ''; position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 30%; height: 15%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 3px solid #3d6e46;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 4: 흰 강아지 (귀 늘어짐) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-4 { background-color: var(--col-dog); border: 1px solid #eee; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-4::before {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: ''; position: absolute; top: 0; left: -10%; width: 120%; height: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(to right, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0 0 10px 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 5: 보라색 소 (색상 변경됨) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-5 {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--col-cow);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 진한 보라색 얼룩 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-image: radial-gradient(circle at 80% 80%, #9c7dd5 15%, transparent 16%), radial-gradient(circle at 20% 20%, #9c7dd5 10%, transparent 11%);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-5::before { /* 뿔 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: ''; position: absolute; top: -10%; left: 15%; width: 70%; height: 30%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(to right, #9c7dd5 20%, transparent 20%, transparent 80%, #9c7dd5 80%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px 5px 0 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 6: 분홍 토끼 (확실한 귀 2개) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-6 { background-color: var(--col-bunny); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animal-6::before {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: ''; position: absolute; top: -40%; left: 0; width: 100%; height: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 둥근 긴 귀 2개 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-image:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(ellipse at center, var(--col-bunny) 60%, transparent 62%),</p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(ellipse at center, var(--col-bunny) 60%, transparent 62%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-size: 30% 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-position: 15% 0, 85% 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-repeat: no-repeat;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 선택된 상태 애니메이션 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.cell.selected .animal {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: scale(1.15);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 100;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filter: brightness(1.1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: squish 0.5s infinite alternate; /* 말랑거리는 효과 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes squish {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>from { transform: scale(1.15) translateY(0); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>to { transform: scale(1.15, 1.05) translateY(-3px); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes bounceText {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>from { transform: translate(-50%, -50%) scale(1); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>to { transform: translate(-50%, -50%) scale(1.2); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 특수 블록 아이템 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 4개 매칭: 선글라스 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.special-4 .animal::after {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-image:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 30% 50%, #fff 20%, transparent 21%),</p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 70% 50%, #fff 20%, transparent 21%),</p>
+<p class="p1"><span class="Apple-converted-space">                </span>linear-gradient(to right, #ffeb3b 100%, #ffeb3b 100%);<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 0 10px #ffeb3b;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: '🕶️'; font-size: 20px; display:flex; align-items:center; justify-content:center; color: transparent; text-shadow: 0 0 0 #333;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%; top: 40%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 5개 매칭: 왕관 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.special-5 .animal::before {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: '👑';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 24px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute; top: -25px; left: 50%; transform: translateX(-50%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: auto; height: auto; background: none; clip-path: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-shadow: 0 2px 2px rgba(0,0,0,0.2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: spinCrown 2s infinite linear;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes spinCrown { 0% { transform: translateX(-50%) rotate(-10deg); } 50% { transform: translateX(-50%) rotate(10deg); } 100% { transform: translateX(-50%) rotate(-10deg); } }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- 글리터 이펙트 --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.explosion-wrapper {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>pointer-events: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 999;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 0; height: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.particle {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 6px; height: 6px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--p-color);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: glitterFade 0.6s ease-out forwards;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.particle.star {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 10px; height: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes glitterFade {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(180deg); opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- 게임 오버 모달 --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.modal {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 0; left: 0; width: 100%; height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255,255,255,0.8);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(5px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 2000;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.modal-content {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 40px 60px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 40px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 30px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 5px solid #ff9a9e;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.btn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #ff9a9e;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px 40px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.2rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: inherit;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 0 #e08085;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.1s, box-shadow 0.1s;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.btn:active { transform: translateY(5px); box-shadow: 0 0 0 #e08085; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 작은 화면 대응 (아이폰 미니 등) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 400px) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>:root { --jelly-size: 12.5vw; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="fever-text" id="fever-text"&gt;FEVER TIME!&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="game-header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="stat-box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="stat-label"&gt;TIME&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="stat-value" id="time"&gt;60&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="stat-box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="stat-label"&gt;SCORE&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="stat-value" id="score"&gt;0&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="fever-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fever-fill" id="fever-fill"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="grid-container" id="grid-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="grid" id="grid"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal" id="game-over-modal"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="modal-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 style="color:#554433; margin:0 0 10px 0;"&gt;Finished!&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p style="color:#999; margin:0;"&gt;YOUR SCORE&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 id="final-score" style="font-size: 3rem; margin: 15px 0; color: #ff9a9e;"&gt;0&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn" onclick="startGame()"&gt;PLAY AGAIN&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">     </span>* CONFIG &amp; VARIABLES</p>
+<p class="p1"><span class="Apple-converted-space">     </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const CONFIG = {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rows: 7,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cols: 7,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 이펙트용 색상 매핑</p>
+<p class="p1"><span class="Apple-converted-space">        </span>colors: [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>'#2a2a2a', // 고양이</p>
+<p class="p1"><span class="Apple-converted-space">            </span>'#ffaa5e', // 여우</p>
+<p class="p1"><span class="Apple-converted-space">            </span>'#ffeebb', // 양</p>
+<p class="p1"><span class="Apple-converted-space">            </span>'#88d498', // 개구리</p>
+<p class="p1"><span class="Apple-converted-space">            </span>'#ffffff', // 강아지</p>
+<p class="p1"><span class="Apple-converted-space">            </span>'#c4a6f5', // 소 (보라색)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>'#ffb7b2'<span class="Apple-converted-space">  </span>// 토끼</p>
+<p class="p1"><span class="Apple-converted-space">        </span>],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timeLimit: 60,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>feverThreshold: 5<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let grid = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let timer = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let timerInterval = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let selectedCell = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let isProcessing = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let comboCount = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let isFever = false;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Elements</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const gridEl = document.getElementById('grid');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const scoreEl = document.getElementById('score');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const timeEl = document.getElementById('time');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const modalEl = document.getElementById('game-over-modal');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const finalScoreEl = document.getElementById('final-score');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const feverFillEl = document.getElementById('fever-fill');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const feverTextEl = document.getElementById('fever-text');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const bodyEl = document.body;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">     </span>* 게임 초기화</p>
+<p class="p1"><span class="Apple-converted-space">     </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function startGame() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timer = CONFIG.timeLimit;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>comboCount = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>isFever = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>selectedCell = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>isProcessing = false;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>scoreEl.innerText = '0';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timeEl.innerText = timer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>modalEl.style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>feverFillEl.style.width = '0%';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>bodyEl.classList.remove('fever-active');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>createGrid();</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (timerInterval) clearInterval(timerInterval);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timerInterval = setInterval(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>timer--;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>timeEl.innerText = timer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (timer &lt;= 0) endGame();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}, 1000);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function createGrid() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>grid = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gridEl.innerHTML = '';</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let r = 0; r &lt; CONFIG.rows; r++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let row = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let c = 0; c &lt; CONFIG.cols; c++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let colorIdx;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>do {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>colorIdx = Math.floor(Math.random() * CONFIG.colors.length);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} while (</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>(r &gt;= 2 &amp;&amp; grid[r-1][c].type === colorIdx &amp;&amp; grid[r-2][c].type === colorIdx) ||</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>(c &gt;= 2 &amp;&amp; row[c-1].type === colorIdx &amp;&amp; row[c-2].type === colorIdx)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const cellData = { r, c, type: colorIdx, special: null };</p>
+<p class="p1"><span class="Apple-converted-space">                </span>row.push(cellData);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid.push(row);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>renderGrid();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function renderGrid() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gridEl.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let r = 0; r &lt; CONFIG.rows; r++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let c = 0; c &lt; CONFIG.cols; c++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const cellData = grid[r][c];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const cellEl = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>cellEl.className = 'cell';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (selectedCell &amp;&amp; selectedCell.r === r &amp;&amp; selectedCell.c === c) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cellEl.classList.add('selected');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// --- 동물 캐릭터 생성 ---</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const animal = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>animal.className = `animal animal-${cellData.type}`;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 특수 블록 시각화</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (cellData.special === '4') cellEl.classList.add('special-4');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (cellData.special === '5') cellEl.classList.add('special-5');</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>cellEl.appendChild(animal);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 이벤트 리스너</p>
+<p class="p1"><span class="Apple-converted-space">                </span>cellEl.addEventListener('click', () =&gt; handleInteraction(r, c));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>cellEl.addEventListener('touchstart', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>e.preventDefault();<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>handleInteraction(r, c);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>grid[r][c].el = cellEl;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>gridEl.appendChild(cellEl);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">     </span>* 게임 로직</p>
+<p class="p1"><span class="Apple-converted-space">     </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">    </span>async function handleInteraction(r, c) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (isProcessing || timer &lt;= 0) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!selectedCell) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>selectedCell = { r, c };</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateCellVisual(r, c);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (selectedCell.r === r &amp;&amp; selectedCell.c === c) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>selectedCell = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderGrid();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const dr = Math.abs(selectedCell.r - r);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const dc = Math.abs(selectedCell.c - c);</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (dr + dc === 1) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>await swapCells(selectedCell, { r, c });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>selectedCell = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>selectedCell = { r, c };</p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderGrid();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function updateCellVisual(r, c) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.querySelectorAll('.cell.selected').forEach(el =&gt; el.classList.remove('selected'));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const cell = grid[r][c].el;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(cell) cell.classList.add('selected');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>async function swapCells(pos1, pos2) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>isProcessing = true;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const tType = grid[pos1.r][pos1.c].type;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const tSpec = grid[pos1.r][pos1.c].special;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>grid[pos1.r][pos1.c].type = grid[pos2.r][pos2.c].type;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>grid[pos1.r][pos1.c].special = grid[pos2.r][pos2.c].special;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>grid[pos2.r][pos2.c].type = tType;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>grid[pos2.r][pos2.c].special = tSpec;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>renderGrid();</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const matches = findMatches();</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (matches.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>comboCount = 0;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>await processMatches(matches);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>await new Promise(resolve =&gt; setTimeout(resolve, 200));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const rType = grid[pos1.r][pos1.c].type;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const rSpec = grid[pos1.r][pos1.c].special;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid[pos1.r][pos1.c].type = grid[pos2.r][pos2.c].type;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid[pos1.r][pos1.c].special = grid[pos2.r][pos2.c].special;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid[pos2.r][pos2.c].type = rType;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid[pos2.r][pos2.c].special = rSpec;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderGrid();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>isProcessing = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function findMatches() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let matchedSet = new Set();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 가로 매칭 확인</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let r = 0; r &lt; CONFIG.rows; r++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let c = 0; c &lt; CONFIG.cols - 2; c++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const t = grid[r][c].type;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (t === -1) continue;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let matchLen = 1;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>while (c + matchLen &lt; CONFIG.cols &amp;&amp; grid[r][c + matchLen].type === t) matchLen++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (matchLen &gt;= 3) for (let i = 0; i &lt; matchLen; i++) matchedSet.add(`${r},${c + i}`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>c += matchLen - 1;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 세로 매칭 확인</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let c = 0; c &lt; CONFIG.cols; c++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let r = 0; r &lt; CONFIG.rows - 2; r++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const t = grid[r][c].type;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (t === -1) continue;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let matchLen = 1;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>while (r + matchLen &lt; CONFIG.rows &amp;&amp; grid[r + matchLen][c].type === t) matchLen++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (matchLen &gt;= 3) for (let i = 0; i &lt; matchLen; i++) matchedSet.add(`${r + i},${c}`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>r += matchLen - 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return Array.from(matchedSet).map(str =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const [r, c] = str.split(',').map(Number);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return { r, c };</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>async function processMatches(matches) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>comboCount++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>updateFever();</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let uniqueCells = matches.length;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let points = uniqueCells * 100 * comboCount;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(isFever) points *= 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>score += points;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>scoreEl.innerText = score.toLocaleString();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let specialToSpawn = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let spawnPos = null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (uniqueCells &gt;= 5) {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>specialToSpawn = '5';<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">             </span>spawnPos = matches[Math.floor(matches.length/2)];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else if (uniqueCells === 4) {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>specialToSpawn = '4';<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">             </span>spawnPos = matches[Math.floor(matches.length/2)];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let extraMatches = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let m of matches) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cell = grid[m.r][m.c];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (cell.special === '4') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for(let i=0; i&lt;7; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>extraMatches.push({r: m.r, c: i});</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>extraMatches.push({r: i, c: m.c});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (cell.special === '5') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const targetColor = Math.floor(Math.random() * 7);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for(let rr=0; rr&lt;7; rr++){</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>for(let cc=0; cc&lt;7; cc++){</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>if(grid[rr][cc].type === targetColor) extraMatches.push({r:rr, c:cc});</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const allMatches = [...matches, ...extraMatches];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const uniqueMatchSet = new Set(allMatches.map(m =&gt; `${m.r},${m.c}`));</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 1. 이펙트 재생 ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>uniqueMatchSet.forEach(key =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const [r, c] = key.split(',').map(Number);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const el = grid[r][c].el;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (el) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 반짝이 이펙트 생성</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const colorHex = CONFIG.colors[grid[r][c].type];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>createGlitterExplosion(el, colorHex);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 동물 숨기기</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const animal = el.querySelector('.animal');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if(animal) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>animal.style.transition = 'transform 0.1s, opacity 0.1s';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>animal.style.transform = 'scale(0.5)';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>animal.style.opacity = '0';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>await new Promise(resolve =&gt; setTimeout(resolve, 300));<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 2. 데이터 제거 ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>uniqueMatchSet.forEach(key =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const [r, c] = key.split(',').map(Number);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid[r][c].type = -1;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid[r][c].special = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (specialToSpawn &amp;&amp; spawnPos &amp;&amp; grid[spawnPos.r][spawnPos.c].type === -1) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid[spawnPos.r][spawnPos.c].type = Math.floor(Math.random() * CONFIG.colors.length);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid[spawnPos.r][spawnPos.c].special = specialToSpawn;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 3. 중력 적용 ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>applyGravity();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>renderGrid();<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>await new Promise(resolve =&gt; setTimeout(resolve, 200));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 4. 연쇄 반응 ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const newMatches = findMatches();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (newMatches.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>await processMatches(newMatches);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">     </span>* ✨ 반짝이 폭발 이펙트 ✨</p>
+<p class="p1"><span class="Apple-converted-space">     </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function createGlitterExplosion(targetEl, colorHex) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!targetEl) return;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const rect = targetEl.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const centerX = rect.left + rect.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const centerY = rect.top + rect.height / 2;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const container = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>container.className = 'explosion-wrapper';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>container.style.left = centerX + 'px';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>container.style.top = centerY + 'px';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>container.style.setProperty('--p-color', colorHex);</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.body.appendChild(container);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 파티클 생성</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const particleCount = 12;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for(let i=0; i&lt;particleCount; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const p = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>p.className = Math.random() &gt; 0.6 ? 'particle star' : 'particle';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 랜덤 방향</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const angle = Math.random() * Math.PI * 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dist = 20 + Math.random() * 30;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const tx = Math.cos(angle) * dist + 'px';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const ty = Math.sin(angle) * dist + 'px';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>p.style.setProperty('--tx', tx);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>p.style.setProperty('--ty', ty);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>container.appendChild(p);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>setTimeout(() =&gt; { container.remove(); }, 600);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function applyGravity() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let c = 0; c &lt; CONFIG.cols; c++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let emptySlots = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let r = CONFIG.rows - 1; r &gt;= 0; r--) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (grid[r][c].type === -1) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>emptySlots++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else if (emptySlots &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>grid[r + emptySlots][c].type = grid[r][c].type;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>grid[r + emptySlots][c].special = grid[r][c].special;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>grid[r][c].type = -1;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>grid[r][c].special = null;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let r = 0; r &lt; emptySlots; r++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>grid[r][c].type = Math.floor(Math.random() * CONFIG.colors.length);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>grid[r][c].special = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function updateFever() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const percentage = Math.min((comboCount / CONFIG.feverThreshold) * 100, 100);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>feverFillEl.style.width = `${percentage}%`;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (comboCount &gt;= CONFIG.feverThreshold &amp;&amp; !isFever) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>isFever = true;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>bodyEl.classList.add('fever-active');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>feverTextEl.style.opacity = 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; { feverTextEl.style.opacity = 0; }, 2000);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else if (comboCount &lt; CONFIG.feverThreshold) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>isFever = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>bodyEl.classList.remove('fever-active');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function endGame() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>clearInterval(timerInterval);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>finalScoreEl.innerText = score.toLocaleString();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>modalEl.style.display = 'flex';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>startGame();</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
