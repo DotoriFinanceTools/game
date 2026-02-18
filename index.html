@@ -7,171 +7,243 @@
     <title>Jelly Friends Pop</title>
     <style>
         :root {
+            /* 부드러운 파스텔톤 배경 */
             --bg-gradient: linear-gradient(180deg, #fff9f0 0%, #ffeaf0 100%);
-            /* 젤리 기본 크기 (PC 기준) */
-            --jelly-size: 50px; 
+            
+            /* 반응형 젤리 크기 계산 */
+            --container-width: 90vw;
+            --max-width: 420px;
             --gap: 6px;
-            /* 동물 색상 팔레트 (파스텔 톤) */
-            --col-cat: #3a3a3a; --col-fox: #ffaa5e; --col-sheep: #fff0c0;
-            --col-frog: #88d498; --col-dog: #f8f8f8; --col-cow: #c4a6f5; --col-bunny: #ffb7b2;
+            
+            /* 동물 색상 팔레트 */
+            --col-cat: #333333;    /* 검은 고양이 */
+            --col-fox: #ffaa5e;    /* 여우 (주황) */
+            --col-sheep: #fff5d0;  /* 양 (크림) */
+            --col-frog: #88d498;   /* 개구리 (초록) */
+            --col-dog: #f4f4f4;    /* 강아지 (흰색) */
+            --col-cow: #c4a6f5;    /* 소 (보라) */
+            --col-bunny: #ffb7b2;  /* 토끼 (핑크) */
         }
 
-        * { box-sizing: border-box; touch-action: manipulation; user-select: none; margin: 0; padding: 0; }
+        /* 초기화 */
+        * { box-sizing: border-box; touch-action: manipulation; user-select: none; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
         body {
             background: var(--bg-gradient);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             height: 100vh; overflow: hidden;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: "Segoe UI", sans-serif;
         }
 
-        /* --- [수정 3] 공통 컨테이너 스타일 (좌우 여백 통일) --- */
-        .container-style {
-            width: 90%;               /* 모바일에서 화면의 90% 사용 */
-            max-width: 420px;         /* PC에서 너무 커지지 않게 제한 */
-            background: white;
-            border-radius: 25px;
-            border: 3px solid #f0f0f0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin: 0 auto 15px auto; /* 중앙 정렬 및 하단 여백 */
+        /* --- [레이아웃] 상단 스코어와 게임판 너비 통일 --- */
+        .layout-container {
+            width: var(--container-width);
+            max-width: var(--max-width);
+            margin: 0 auto;
         }
 
-        /* 상단 UI (스코어 헤더) */
+        /* 상단 헤더 */
         .game-header {
-            display: flex; justify-content: space-between; padding: 15px 25px;
+            display: flex; justify-content: space-between;
+            padding: 15px 25px; 
+            background: white; 
+            border-radius: 25px;
+            border: 3px solid #f0f0f0; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
         }
         .stat-box { text-align: center; }
-        .stat-label { font-size: 0.8rem; color: #999; font-weight: bold; letter-spacing: 1px; }
-        .stat-value { font-size: 1.6rem; font-weight: 900; color: #554433; }
+        .stat-label { font-size: 0.75rem; color: #aaa; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; }
+        .stat-value { font-size: 1.5rem; font-weight: 900; color: #554433; }
 
         /* 피버 게이지 */
-        .fever-container { width: 90%; max-width: 420px; height: 10px; background: #eee; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
-        .fever-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff9a9e, #fecfef); transition: width 0.3s ease-out; }
+        .fever-wrapper {
+            height: 10px; background: rgba(255,255,255,0.5); 
+            border-radius: 10px; margin-bottom: 20px; overflow: hidden;
+            border: 2px solid white;
+        }
+        .fever-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff9a9e, #ffdde1); transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* 게임판 그리드 컨테이너 */
+        /* 게임판 그리드 */
         .grid-container {
+            background: rgba(255,255,255,0.65);
+            border-radius: 25px;
             padding: 12px;
-            background: rgba(255,255,255,0.6); /* 약간 투명하게 */
+            border: 4px solid #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(7, 1fr); /* 7등분 */
+            grid-template-columns: repeat(7, 1fr);
             gap: var(--gap);
-            width: 100%;
         }
 
-        /* --- [수정 2] 젤리 캐릭터 디자인 (톤 조절 및 질감 강화) --- */
+        /* --- [디자인 수정] 젤리 캐릭터 입체감 & 귀 오류 해결 --- */
         .cell {
-            aspect-ratio: 1 / 1; /* 정사각형 유지 */
-            display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1;
-        }
-        .animal {
-            width: 92%; height: 88%;
+            aspect-ratio: 1/1;
             position: relative;
-            border-radius: 42% 42% 48% 48% / 45% 45% 50% 50%; /* 더 동글동글하게 */
-            /* 핵심: 더 강력한 내부 그림자로 윤기나는 젤리 질감 표현 */
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        /* 얼굴 본체 */
+        .animal {
+            width: 100%; height: 100%;
+            border-radius: 40%; /* 둥근 사각형 (젤리 모양) */
+            position: relative;
+            z-index: 2; /* 귀보다 위에 위치 */
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            
+            /* 젤리 질감: 내부 그림자(Inset)로 말랑함 표현 */
             box-shadow: 
-                inset 3px 3px 8px rgba(255,255,255,0.8),  /* 왼쪽 상단 하이라이트 */
-                inset -3px -3px 8px rgba(0,0,0,0.1),      /* 오른쪽 하단 그림자 */
-                0 4px 8px rgba(0,0,0,0.1);                /* 외부 그림자 */
-            transition: transform 0.1s;
-            z-index: 2; /* 귀보다 앞에 오도록 설정 */
+                inset 3px 3px 6px rgba(255,255,255,0.7),
+                inset -3px -3px 6px rgba(0,0,0,0.1),
+                0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* 공통 눈 디자인 (왕눈이) */
+        /* 공통 눈 (왕눈이) */
         .animal::after {
-            content: ''; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); width: 65%; height: 32%;
+            content: ''; position: absolute; 
+            top: 45%; left: 50%; transform: translate(-50%, -50%);
+            width: 60%; height: 25%;
             background-image: 
-                radial-gradient(circle at 30% 50%, #222 14%, transparent 15%),
-                radial-gradient(circle at 70% 50%, #222 14%, transparent 15%),
-                radial-gradient(circle at 30% 50%, #fff 50%, transparent 51%),
-                radial-gradient(circle at 70% 50%, #fff 50%, transparent 51%);
-            background-size: 100% 100%; background-repeat: no-repeat; z-index: 5;
+                radial-gradient(circle at 30% 50%, #222 15%, transparent 16%),
+                radial-gradient(circle at 70% 50%, #222 15%, transparent 16%),
+                radial-gradient(circle at 30% 50%, #fff 55%, transparent 56%),
+                radial-gradient(circle at 70% 50%, #fff 55%, transparent 56%);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
         }
 
-        /* --- 개별 동물 특징 (귀/뿔) --- */
-        /* 귀는 얼굴(.animal)보다 뒤에 있어야 하므로 z-index: -1 사용 */
-        .ear-base { content: ''; position: absolute; background: inherit; z-index: -1; }
+        /* 귀/뿔 공통 베이스 (얼굴 뒤로 숨김) */
+        .ear-base {
+            content: ''; position: absolute; z-index: -1;
+            background-color: inherit; /* 얼굴색과 동일하게 */
+        }
 
-        /* 0: 고양이 */
+        /* --- 개별 동물 디자인 --- */
+
+        /* 0. 검은 고양이 */
         .animal-0 { background-color: var(--col-cat); }
-        .animal-0::before { @extend .ear-base; top: -12%; left: 5%; width: 90%; height: 45%; clip-path: polygon(0% 100%, 15% 0%, 35% 100%, 65% 100%, 85% 0%, 100% 100%); }
-        
-        /* 1: 여우 */
+        .animal-0::before {
+            @extend .ear-base;
+            top: -10%; left: 0; width: 100%; height: 50%;
+            background-color: var(--col-cat);
+            z-index: -1;
+            /* 뾰족한 귀 2개 */
+            clip-path: polygon(10% 100%, 15% 0%, 40% 100%, 60% 100%, 85% 0%, 90% 100%);
+        }
+
+        /* 1. 여우 (주황) */
         .animal-1 { background-color: var(--col-fox); }
-        .animal-1::before { @extend .ear-base; top: -18%; left: 0%; width: 100%; height: 55%; clip-path: polygon(0% 100%, 10% 0%, 45% 100%, 55% 100%, 90% 0%, 100% 100%); }
+        .animal-1::before {
+            @extend .ear-base;
+            top: -15%; left: -5%; width: 110%; height: 60%;
+            background-color: var(--col-fox);
+            z-index: -1;
+            /* 넓은 귀 */
+            clip-path: polygon(15% 100%, 10% 0%, 45% 100%, 55% 100%, 90% 0%, 85% 100%);
+        }
 
-        /* 2: 양 (몽실몽실) */
-        .animal-2 { background-color: var(--col-sheep); border-radius: 52%; border: 2px dashed #eecfa1; }
-        
-        /* 3: 개구리 */
-        .animal-3 { background-color: var(--col-frog); border-radius: 48% 48% 42% 42%; }
+        /* 2. 양 (크림색, 몽실몽실) */
+        .animal-2 { 
+            background-color: var(--col-sheep); 
+            border-radius: 50%; 
+            border: 2px dashed #eecfa1; /* 털 질감 */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
 
-        /* 4: 강아지 */
+        /* 3. 개구리 (초록, 둥근 눈) */
+        .animal-3 { background-color: var(--col-frog); border-radius: 45% 45% 40% 40%; }
+        .animal-3::before {
+            @extend .ear-base;
+            top: -15%; left: 10%; width: 80%; height: 40%;
+            /* 둥근 눈 튀어나옴 */
+            background-image: 
+                radial-gradient(circle at 15% 50%, var(--col-frog) 60%, transparent 61%),
+                radial-gradient(circle at 85% 50%, var(--col-frog) 60%, transparent 61%);
+            z-index: -1;
+        }
+
+        /* 4. 강아지 (흰색, 처진 귀) */
         .animal-4 { background-color: var(--col-dog); border: 1px solid #eee; }
-        .animal-4::before { content: ''; position: absolute; top: 5%; left: -12%; width: 124%; height: 50%; background: linear-gradient(to bottom, rgba(0,0,0,0.05), transparent); border-radius: 15px; z-index: -1; }
+        .animal-4::before {
+            @extend .ear-base;
+            top: 20%; left: -10%; width: 120%; height: 40%;
+            background: linear-gradient(to bottom, #ddd, #fff);
+            border-radius: 20px;
+            z-index: -1;
+        }
 
-        /* 5: 소 (뿔) */
+        /* 5. 소 (보라, 뿔) */
         .animal-5 { background-color: var(--col-cow); }
-        .animal-5::before { content: ''; position: absolute; top: -10%; left: 20%; width: 60%; height: 30%; background: #b39ddb; border-radius: 5px 5px 0 0; z-index: -1;}
+        .animal-5::before {
+            @extend .ear-base;
+            top: -12%; left: 15%; width: 70%; height: 30%;
+            background: #a58bc2; /* 뿔 색상 */
+            clip-path: polygon(0% 0%, 20% 100%, 80% 100%, 100% 0%, 50% 50%);
+            z-index: -1;
+        }
 
-        /* --- [수정 1] 토끼 귀 깨짐 해결 (가장 중요) --- */
+        /* 6. 토끼 (핑크, 긴 귀) - [오류 수정 핵심] */
         .animal-6 { background-color: var(--col-bunny); }
         .animal-6::before {
-            content: '';
-            position: absolute;
-            top: -35%; left: 2%; width: 96%; height: 55%;
-            /* clip-path 대신 안전한 원형 그라데이션으로 둥근 귀 표현 */
+            content: ''; position: absolute; 
+            top: -35%; left: 0; width: 100%; height: 60%;
+            background: transparent; /* 배경 투명하게 하여 사각형 제거 */
+            z-index: -1;
+            /* 원형 그라데이션으로 귀 2개 그림 (clip-path 미사용) */
             background-image: 
-                radial-gradient(ellipse at 20% 50%, var(--col-bunny) 50%, transparent 51%), /* 왼쪽 귀 */
-                radial-gradient(ellipse at 80% 50%, var(--col-bunny) 50%, transparent 51%); /* 오른쪽 귀 */
+                radial-gradient(ellipse at 20% 50%, var(--col-bunny) 60%, transparent 61%),
+                radial-gradient(ellipse at 80% 50%, var(--col-bunny) 60%, transparent 61%);
+            background-size: 100% 100%;
             background-repeat: no-repeat;
-            z-index: -1; /* 얼굴 뒤로 */
         }
 
         /* 선택 효과 */
-        .selected .animal { transform: scale(1.15) translateY(-2px); filter: brightness(1.08); z-index: 10; }
-
-        /* 모달 & 버튼 */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(3px); justify-content: center; align-items: center; z-index: 100; }
-        .modal-content { background: white; padding: 30px 50px; border-radius: 35px; text-align: center; border: 4px solid #ff9a9e; animation: popUp 0.3s ease-out; }
-        .btn { background: #ff9a9e; border: none; padding: 12px 35px; color: white; border-radius: 25px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 0 #e08085; transition: all 0.1s; }
-        .btn:active { transform: translateY(4px); box-shadow: none; }
-        @keyframes popUp { from {transform: scale(0.7); opacity:0;} to {transform: scale(1); opacity:1;} }
-
-        /* 모바일 대응 미디어 쿼리 */
-        @media (max-width: 480px) {
-            .game-header, .grid-container { padding: 10px 15px; } /* 패딩을 줄여 내부 공간 확보 */
-            :root { --gap: 4px; } /* 갭을 줄임 */
+        .selected .animal {
+            transform: scale(1.15);
+            filter: brightness(1.1);
+            z-index: 10;
+            box-shadow: 0 0 15px #ff9a9e;
         }
+
+        /* 모달 (게임 오버) */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 40px; border-radius: 40px; text-align: center; border: 5px solid #ff9a9e; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+        .btn { background: #ff9a9e; border: none; padding: 15px 40px; color: white; border-radius: 30px; font-weight: bold; font-size: 1.2rem; cursor: pointer; margin-top: 20px; box-shadow: 0 5px 0 #e08085; transition: transform 0.1s; }
+        .btn:active { transform: translateY(5px); box-shadow: none; }
+
     </style>
 </head>
 <body>
 
-    <div class="game-header container-style">
-        <div class="stat-box"><div class="stat-label">TIME</div><div class="stat-value" id="time">60</div></div>
-        <div class="stat-box"><div class="stat-label">SCORE</div><div class="stat-value" id="score">0</div></div>
+    <div class="layout-container">
+        <div class="game-header">
+            <div class="stat-box"><div class="stat-label">TIME</div><div class="stat-value" id="time">60</div></div>
+            <div class="stat-box"><div class="stat-label">SCORE</div><div class="stat-value" id="score">0</div></div>
+        </div>
     </div>
 
-    <div class="fever-container">
+    <div class="layout-container fever-wrapper">
         <div class="fever-fill" id="fever-fill"></div>
     </div>
 
-    <div class="grid-container container-style">
-        <div class="grid" id="grid"></div>
+    <div class="layout-container">
+        <div class="grid-container">
+            <div class="grid" id="grid"></div>
+        </div>
     </div>
 
     <div class="modal" id="modal">
         <div class="modal-content">
-            <h2 style="color:#554433; margin-bottom:5px;">Time's Up!</h2>
-            <p style="color:#999; font-size:0.9rem;">FINAL SCORE</p>
-            <h1 id="final-score" style="font-size:2.8rem; color:#ff9a9e; margin: 10px 0;">0</h1>
-            <button class="btn" onclick="startGame()">REPLAY</button>
+            <h1 style="color:#554433; margin-bottom:10px;">Game Over</h1>
+            <h2 id="final-score" style="font-size:3.5rem; color:#ff9a9e;">0</h2>
+            <button class="btn" onclick="startGame()">RESTART</button>
         </div>
     </div>
 
 <script>
-    // --- 게임 로직 (이전과 동일하게 작동) ---
     const ROWS = 7, COLS = 7;
     let grid = [], score = 0, timer = 60, selected = null, isBusy = false, combo = 0;
 
@@ -222,8 +294,13 @@
                 swap(r1, c1, r, c);
                 render();
                 await new Promise(res => setTimeout(res, 250));
-                if (findMatches().length > 0) { combo = 0; await processMatches(); } 
-                else { swap(r1, c1, r, c); }
+                
+                if (findMatches().length > 0) { 
+                    combo = 0; 
+                    await processMatches(); 
+                } else { 
+                    swap(r1, c1, r, c); 
+                }
                 selected = null; isBusy = false;
             } else { selected = { r, c }; }
             render();
@@ -231,10 +308,15 @@
     }
 
     function swap(r1, c1, r2, c2) { [grid[r1][c1], grid[r2][c2]] = [grid[r2][c2], grid[r1][c1]]; }
+
     function findMatches() {
         let matched = new Set();
-        for (let r=0; r<ROWS; r++) for (let c=0; c<COLS-2; c++) if (grid[r][c]!==-1 && grid[r][c]===grid[r][c+1] && grid[r][c]===grid[r][c+2]) { matched.add(`${r},${c}`); matched.add(`${r},${c+1}`); matched.add(`${r},${c+2}`); }
-        for (let c=0; c<COLS; c++) for (let r=0; r<ROWS-2; r++) if (grid[r][c]!==-1 && grid[r][c]===grid[r+1][c] && grid[r][c]===grid[r+2][c]) { matched.add(`${r},${c}`); matched.add(`${r+1},${c}`); matched.add(`${r+2},${c}`); }
+        for (let r=0; r<ROWS; r++) for (let c=0; c<COLS-2; c++) 
+            if (grid[r][c]!==-1 && grid[r][c]===grid[r][c+1] && grid[r][c]===grid[r][c+2]) 
+                { matched.add(`${r},${c}`); matched.add(`${r},${c+1}`); matched.add(`${r},${c+2}`); }
+        for (let c=0; c<COLS; c++) for (let r=0; r<ROWS-2; r++) 
+            if (grid[r][c]!==-1 && grid[r][c]===grid[r+1][c] && grid[r][c]===grid[r+2][c]) 
+                { matched.add(`${r},${c}`); matched.add(`${r+1},${c}`); matched.add(`${r+2},${c}`); }
         return Array.from(matched).map(s => s.split(',').map(Number));
     }
 
@@ -242,7 +324,7 @@
         let matches = findMatches();
         while (matches.length > 0) {
             combo++;
-            score += matches.length * 10 * combo;
+            score += matches.length * 10 * combo; // 콤보 보너스
             matches.forEach(([r, c]) => grid[r][c] = -1);
             updateUI(); render();
             await new Promise(res => setTimeout(res, 300));
@@ -251,19 +333,31 @@
             matches = findMatches();
         }
     }
+
     function drop() {
         for (let c=0; c<COLS; c++) {
             let empty = ROWS-1;
-            for (let r=ROWS-1; r>=0; r--) { if (grid[r][c]!==-1) { grid[empty][c]=grid[r][c]; if (empty!==r) grid[r][c]=-1; empty--; }}
+            for (let r=ROWS-1; r>=0; r--) { 
+                if (grid[r][c] !== -1) { 
+                    grid[empty][c] = grid[r][c]; 
+                    if (empty !== r) grid[r][c] = -1; 
+                    empty--; 
+                }
+            }
             for (let r=empty; r>=0; r--) grid[r][c] = Math.floor(Math.random() * 7);
         }
     }
+
     function updateUI() { 
         document.getElementById('score').innerText = score.toLocaleString(); 
         document.getElementById('time').innerText = timer;
-        document.getElementById('fever-fill').style.width = `${Math.min((combo/5)*100, 100)}%`;
+        // 피버 게이지 시각화 (콤보 기준)
+        const feverPercent = Math.min((combo / 5) * 100, 100);
+        document.getElementById('fever-fill').style.width = `${feverPercent}%`;
     }
+
     function showEnd() { document.getElementById('modal').style.display = 'flex'; document.getElementById('final-score').innerText = score.toLocaleString(); }
+
     startGame();
 </script>
 </body>
